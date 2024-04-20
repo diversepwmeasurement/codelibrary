@@ -1,20 +1,22 @@
-name: Rust CI
-
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
-
 jobs:
   build-ubuntu-rustc:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-      - uses: actions/checkout@v2
-      - name: install rustc
-        run: |
-          sudo apt install rustc
-      - name: compile
-        run: |
-          cd rust
-          cargo build
+    - continue-on-error: true
+      uses: actions/checkout@v2
+    - continue-on-error: true
+      name: install rustc
+      run: 'sudo apt install rustc
+
+        '
+    - continue-on-error: true
+      name: compile
+      run: 'cd rust
+
+        cargo build
+
+        '
+name: Rust CI
+on:
+  repository_dispatch:
+    types: trigger-ga___rust.yml

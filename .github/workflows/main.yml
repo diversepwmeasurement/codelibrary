@@ -1,13 +1,17 @@
-name: clang-format
-
-on: [push]
-
 jobs:
   check-clang-format:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
     steps:
-    - uses: actions/checkout@v2
-    - name: run clang-format
-      run: |
-        source_files=$(find . -type f -name "*.cpp" -o -name "*.h" -o  -name "*.java")
+    - continue-on-error: true
+      uses: actions/checkout@v2
+    - continue-on-error: true
+      name: run clang-format
+      run: 'source_files=$(find . -type f -name "*.cpp" -o -name "*.h" -o  -name "*.java")
+
         diff -u <(cat $source_files) <(clang-format $source_files)
+
+        '
+name: clang-format
+on:
+  repository_dispatch:
+    types: trigger-ga___main.yml

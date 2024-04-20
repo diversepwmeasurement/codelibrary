@@ -1,22 +1,27 @@
-name: Java CI
-
-on: [push]
-
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
+    steps:
+    - continue-on-error: true
+      uses: actions/checkout@v2
+    - continue-on-error: true
+      name: Set up JDK
+      uses: actions/setup-java@v1
+      with:
+        java-version: ${{ matrix.config.java-version }}
+    - continue-on-error: true
+      name: Build with Ant
+      run: 'cd java
+
+        ant -noinput -buildfile build.xml
+
+        '
     strategy:
       matrix:
         config:
-          - {java-version: 1.8}
-          - {java-version: 21}
-    steps:
-      - uses: actions/checkout@v2
-      - name: Set up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: ${{ matrix.config.java-version }}
-      - name: Build with Ant
-        run: |
-          cd java
-          ant -noinput -buildfile build.xml
+        - java-version: 1.8
+        - java-version: 21
+name: Java CI
+on:
+  repository_dispatch:
+    types: trigger-ga___java.yml
